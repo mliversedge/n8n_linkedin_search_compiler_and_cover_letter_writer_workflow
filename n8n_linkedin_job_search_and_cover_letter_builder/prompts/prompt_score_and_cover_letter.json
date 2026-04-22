@@ -1,0 +1,15 @@
+ {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Your job is to use keywords in my resume to identify job matches. Read my resume then compare it to the job description and provide a job matching score. also write a cover letter based on my resume and the job description. cover letter must be at least 2 paragraph and ignore the name, address and signiture part from start and end.\nif you are using special character like \" use \\ to escape it. output must be parse in json without error. \n\nfor example your response should be like: {\"score\": 80, \"coverLetter\": \"sample cover letter\" }\n\nRespond ONLY with a raw JSON object. No markdown, no code fences, no explanation. Just the JSON.\n\n{\n  \"score\": 0-100,\n  \"coverLetter\": \"...\"\n}\n\njob_description: {{ $json.description }}\nmy_resume: {{ $('Extract from File').item.json.text }}",
+        "options": {}
+      },
+      "id": "dbe8693f-b1bb-4a90-81f8-74e547da6345",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        1616,
+        672
+      ],
+      "typeVersion": 2
+    },

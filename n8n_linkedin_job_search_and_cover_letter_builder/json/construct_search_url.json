@@ -1,0 +1,14 @@
+// returns a LinkedIn job search URL based on the input parameters (keyword, location, remote, job type) within the google sheet. The URL is constructed to include filters for jobs posted in the last 24 hours and any additional criteria specified by the user.
+{
+      "parameters": {
+        "jsCode": "let url = \"https://www.linkedin.com/jobs/search/?f_TPR=r86400\";\n\nconst keyword = $input.first().json.Keyword;\nconst location = $input.first().json.Location;\nconst remote = $input.first().json.Remote;\nconst jobType = $input.first().json['Job Type'];\n\nif (keyword && keyword != \"\") {\n  url += `&keywords=${encodeURIComponent(keyword)}`;\n}\n\nif (location && location != \"\") {\n  url += `&location=${encodeURIComponent(location)}`;\n}\n\nif (remote && remote != \"\") {\n  const transformedRemote = remote\n    .split(\",\")\n    .map((e) => {\n      switch (e.trim()) {\n        case \"Remote\":  return \"2\";\n        case \"Hybrid\":  return \"3\";\n        case \"On-Site\": return \"1\";\n        default:        return \"\";\n      }\n    })\n    .filter(Boolean);\n  url += `&f_WT=${transformedRemote.join(\",\")}`;\n}\n\nif (jobType && jobType != \"\") {\n  const transformedJobType = jobType\n    .split(\",\")\n    .map((type) => {\n      switch (type.trim()) {\n        case \"Full-time\":  return \"F\";\n        case \"Part-time\":  return \"P\";\n        case \"Contract\":   return \"C\";\n        case \"Temporary\":  return \"T\";\n        case \"Internship\": return \"I\";\n        case \"Other\":      return \"O\";\n        default:           return \"\";\n      }\n    })\n    .filter(Boolean);\n  url += `&f_JT=${transformedJobType.join(\",\")}`;\n}\n\nreturn { url };"
+      },
+      "id": "8e9679f9-f523-4ae5-933a-50f4e085f9d1",
+      "name": "Create search URL",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        1856,
+        352
+      ],
+      "typeVersion": 2
+    },

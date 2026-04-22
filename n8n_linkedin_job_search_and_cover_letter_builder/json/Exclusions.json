@@ -1,0 +1,14 @@
+// Checks for excluded roles, companies, and links, and marks items as filtered if they match any of the criteria. If current job post is filtered out, the next node will fetch the next job posting in the search.
+{
+      "parameters": {
+        "jsCode": "const exclusionRows = $('Get row(s) in sheet1').all();\n\nconst excludedRoles = exclusionRows\n  .map(r => r.json.Roles?.toLowerCase().trim())\n  .filter(Boolean);\n\nconst excludedCompanies = exclusionRows\n  .map(r => r.json.Companies?.toLowerCase().trim())\n  .filter(Boolean);\n\nconst appliedLinks = exclusionRows\n  .map(r => r.json.Links?.toLowerCase().trim())\n  .filter(Boolean);\n\nconst link = ($('Split Out').first().json.links || '').toLowerCase().trim();\nconst linkBlocked = appliedLinks.some(l => l.includes(link) || link.includes(l));\n\nconst results = [];\nfor (const item of $input.all()) {\n  const title = (item.json.title || '').toLowerCase();\n  const company = (item.json.company || '').toLowerCase();\n\n  const titleBlocked = excludedRoles.some(role => title.includes(role));\n  const companyBlocked = excludedCompanies.some(co => company.includes(co));\n\n  if (!titleBlocked && !companyBlocked && !linkBlocked) {\n    results.push({ json: item.json });\n  } else {\n    results.push({ json: { filtered: 1 } });\n  }\n}\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1136,
+        656
+      ],
+      "id": "1aad8e3f-1f3b-434a-ba0d-734ea851dd80",
+      "name": "Code in JavaScript"
+    },
